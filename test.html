@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة توظيف قيادة قوات الطوارئ الخاصة - Soul RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+    body { background-color: #c1b892; color: #000000; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    
+    .bg-custom-dark { background-color: #000000; border: 1px solid rgba(63, 63, 70, 0.4); }
+    
+    input, select, textarea { 
+        background-color: #040423 !important; 
+        border: 1px solid #1e1e2f !important; 
+        color: white !important; 
+        border-radius: 8px; 
+        padding: 14px !important; 
+        width: 100%;
+        margin-top: 5px;
+    }
+    input:focus, select:focus, textarea:focus {
+        border-color: #210909 !important;
+        outline: none;
+    }
+    
+    h1, h2 { font-weight: 800; letter-spacing: -0.5px; }
+
+    #quiz-container .question-card {
+        background: #040423;
+        border: 1px solid #111122;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        position: relative;
+        border-right: 5px solid #210909;
+    }
+
+    .question-number {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #210909;
+        color: #fbbf24; 
+        font-weight: 900;
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .option-label {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+        background: #000000;
+        border: 1px solid #3f3f46;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #ffffff;
+        width: 100%;
+    }
+
+    .option-radio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #a1a1aa;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .real-radio { display: none; }
+
+    .real-radio:checked + .option-label {
+        border-color: #fbbf24; 
+        background: #2d0404;
+        color: #ffffff;
+    }
+
+    .real-radio:checked + .option-label .option-radio {
+        border: 6px solid #fbbf24; 
+        background: #000000;
+    }
+
+    .option-label:hover {
+        background: #2d0404;
+        border-color: #ffffff;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #1e1e1e; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+    
+    /* === حلول جراحية لمشكلة الكارد في صورة Sef-Card-50006_3.jpg === */
+    .card-fix-text {
+        direction: rtl !important;
+        text-align: center !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    </style>
+</head>
+<body class="p-6 md:p-8 min-h-screen flex flex-col justify-between">
+
+    <div class="max-w-7xl mx-auto w-full space-y-6">
+        
+        <!-- الهيدر الرئيسي للموقع -->
+        <div class="bg-custom-dark rounded-xl p-8 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden shadow-2xl">
+            <div class="text-right md:w-1/3">
+                <span class="text-[14px] text-red-500 font-bold uppercase tracking-widest block mb-1">الموارد البشرية</span>
+                <h1 class="text-xl font-black text-white tracking-wide mt-1">الكلية العسكرية لـقوات الطوارئ</h1>
+                <p class="text-gray-400 text-xs mt-2 leading-relaxed">منصة لتسجيل بيانات المتقدم لقطاع قوات الطوارئ، اختبار جاهزية المتقدم، وتوثيق الصور.</p>
+            </div>
+            
+            <div class="flex flex-col justify-center items-center md:w-1/3 relative group">
+                <input type="file" id="main_logo_uploader" accept="image/*" class="hidden" onchange="handleLogoUpload(this)">
+                <div onclick="document.getElementById('main_logo_uploader').click()" class="cursor-pointer relative">
+                    <img id="main_logo_img" src="OIP.webp" alt="شعار قوات الطوارئ الخاصة" class="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.3)] rounded-full">
+                    <div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-[10px] text-white font-bold text-center p-1">اضغط لرفع الشعار</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center md:text-left md:w-1/3 flex flex-col md:items-end">
+                <span class="text-[14px] text-red-500 font-bold mb-1">HUMAN RESOURCES</span>
+                <span class="text-xl font-black text-white tracking-wider uppercase mt-1">SPECIAL EMERGENCY FORCES</span>
+            </div>
+        </div>
+
+        <!-- شريط التقدم العلوي -->
+        <div class="bg-custom-dark rounded-xl p-6 flex justify-around items-center text-xs font-black shadow-md">
+            <div id="bar1" class="text-red-500 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-red-500 text-black flex items-center justify-center text-xs font-bold">01</span><span>البيانات</span></div>
+            <div class="h-[1px] bg-zinc-800 flex-1 mx-4"></div>
+            <div id="bar2" class="text-gray-500 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-zinc-800 text-gray-400 flex items-center justify-center text-xs font-bold">02</span><span>الاختبار</span></div>
+            <div class="h-[1px] bg-zinc-800 flex-1 mx-4"></div>
+            <div id="bar3" class="text-gray-500 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-zinc-800 text-gray-400 flex items-center justify-center text-xs font-bold">03</span><span>المرفقات</span></div>
+            <div class="h-[1px] bg-zinc-800 flex-1 mx-4"></div>
+            <div id="bar4" class="text-gray-500 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-zinc-800 text-gray-400 flex items-center justify-center text-xs font-bold">04</span><span>المخرجات</span></div>
+        </div>
+
+        <!-- القسم الأوسط -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
+            
+            <!-- القائمة الجانبية -->
+            <div class="md:col-span-1 bg-custom-dark p-6 rounded-xl flex flex-col justify-between shadow-md min-h-full">
+                <div>
+                    <div class="text-center pb-4 border-b border-zinc-800 mb-6">
+                        <span class="text-xs text-gray-500 block font-bold tracking-widest">SEF INTAKE</span>
+                        <h3 class="text-xl font-black text-white mt-1">مسار القبول</h3>
+                    </div>
+                    
+                    <div class="space-y-4 text-base font-bold">
+                        <div id="side1" class="flex items-center justify-between p-4 rounded-xl border-r-4 border-red-500 bg-zinc-800/40 cursor-pointer" onclick="goToStep(1)">
+                            <span class="text-white font-black">البيانات</span>
+                            <span id="side_status1" class="bg-red-500 text-black text-xs font-black px-3 py-1.5 rounded-md">مكتملة</span>
+                        </div>
+
+                        <div id="side2" class="flex items-center justify-between p-4 rounded-xl border-r-4 border-zinc-800 bg-zinc-800/20 cursor-pointer" onclick="goToStep(2)">
+                            <span class="text-gray-400 font-black">الاختبار</span>
+                            <span id="side_status2" class="bg-zinc-800 text-gray-400 text-xs font-black px-3 py-1.5 rounded-md">0 / 16</span>
+                        </div>
+
+                        <div id="side3" class="flex items-center justify-between p-4 rounded-xl border-r-4 border-zinc-800 bg-zinc-800/20 cursor-pointer" onclick="goToStep(3)">
+                            <span class="text-gray-400 font-black">المرفقات</span>
+                            <span id="side_status3" class="bg-zinc-800 text-gray-400 text-xs font-black px-3 py-1.5 rounded-md">0 / 2</span>
+                        </div>
+
+                        <div id="side4" class="flex items-center justify-between p-4 rounded-xl border-r-4 border-zinc-800 bg-zinc-800/20 cursor-pointer" onclick="goToStep(4)">
+                            <span class="text-gray-400 font-black">المخرجات</span>
+                            <span id="side_status4" class="bg-zinc-800 text-gray-400 text-xs font-black px-3 py-1.5 rounded-md whitespace-nowrap">معاينة</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-zinc-800 text-center mt-6">
+                    <span class="text-sm text-gray-500 block font-bold">حالة التوظيف</span>
+                    <span id="fileStatus" class="text-xl font-black text-red-500 block mt-1">جاري الإدخال</span>
+                </div>
+            </div>
+
+            <!-- محتويات الصناديق -->
+            <div class="md:col-span-3 bg-custom-dark p-6 rounded-xl shadow-xl flex flex-col justify-between">
+                
+                <!-- الخطوة الأولى: البيانات -->
+                <div id="step1Content" class="space-y-5 h-full flex flex-col justify-between">
+                    <div class="space-y-5">
+                        <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                            <h2 class="text-xl font-black text-white">بيانات المستجد الرئيسية</h2>
+                            <span class="text-xs text-gray-500 font-black">STEP 01</span>
+                        </div>
+
+                        <div class="bg-zinc-800/30 p-4 rounded-xl border border-zinc-800">
+                            <label class="block text-xs text-red-400 mb-1 font-black">ايدي الديسكورد للشخص (Discord ID) أو المنشن</label>
+                            <input type="text" id="discord_id" placeholder="مثال : 762650291333365780" class="text-white">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-300 mb-1 font-bold">اسم المتقدم</label>
+                                <input type="text" id="applicant_name" placeholder="أدخل الاسم ">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-300 mb-1 font-bold">هوية المستخدم داخل اللعبة (ID)</label>
+                                <input type="text" id="game_id" placeholder="أدخل الـ ID">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-300 mb-1 font-bold">العمر</label>
+                                <input type="number" id="applicant_age" placeholder="أدخل العمر">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-300 mb-1 font-bold">رقم الكود العسكري (رقم فقط)</label>
+                                <input type="number" id="soldier_code" placeholder="مثال: 0 أو 5" oninput="calculateUnits()">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-zinc-800/60 pt-4">
+                            <div>
+                                <label class="block text-xs text-zinc-500 mb-1 font-bold">اليونت الحالي (تلقائي)</label>
+                                <input type="text" id="current_unit" readonly class="opacity-60 cursor-not-allowed text-center font-bold" placeholder="M-0">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-zinc-500 mb-1 font-bold">اليونت القادم (تلقائي)</label>
+                                <input type="text" id="next_unit" readonly class="opacity-60 cursor-not-allowed text-center font-bold" placeholder="M-1">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-300 mb-1 font-bold">مسؤول القبول </label>
+                                <input type="text" id="officer_admission" placeholder="مثال : 762650291333365780">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-end border-t border-zinc-800/60 mt-6">
+                        <button type="button" onclick="goToStep(2)" class="bg-red-600 hover:bg-red-700 text-white font-black text-xs py-3 px-8 rounded-lg transition shadow-md">
+                            التالي: الانتقال للاختبار ⬅️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- الخطوة الثانية: الاختبار -->
+                <div id="step2Content" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-black text-white">اختبار أهلية القبول والميثاق العسكري</h2>
+                        <span class="text-xs text-gray-500 font-black">STEP 02</span>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar text-right" onchange="updateQuizStatus()">
+                        <div class="question-card">
+                            <span class="question-number">1</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 1: قطاع قوات الطوارئ تابعة إلى:</p>
+                            <input type="radio" name="q1" id="q1_o1" value="1" class="real-radio">
+                            <label for="q1_o1" class="option-label"><span class="text-sm font-bold">رئاسة الوزراء</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q1" id="q1_o2" value="2" class="real-radio">
+                            <label for="q1_o2" class="option-label"><span class="text-sm font-bold">وزارة الدفاع</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q1" id="q1_o3" value="correct" class="real-radio">
+                            <label for="q1_o3" class="option-label"><span class="text-sm font-bold">وزارة الداخلية</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q1" id="q1_o4" value="4" class="real-radio">
+                            <label for="q1_o4" class="option-label"><span class="text-sm font-bold">مستقل</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">2</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 2: ماهي مهام قطاع قوات الطوارئ؟</p>
+                            <input type="radio" name="q2" id="q2_o1" value="1" class="real-radio">
+                            <label for="q2_o1" class="option-label"><span class="text-sm font-bold">مكافحة المخدرات</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q2" id="q2_o2" value="2" class="real-radio">
+                            <label for="q2_o2" class="option-label"><span class="text-sm font-bold">اللحاق بالخارجين عن القانون</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q2" id="q2_o3" value="correct" class="real-radio">
+                            <label for="q2_o3" class="option-label"><span class="text-sm font-bold">القيام بالمهام الاكثر صعوبة وسرية لحماية أمن الدولة</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">3</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 3: جميع الأسلحة ماعدا الشتقن والسنايبر مسموحه في:</p>
+                            <input type="radio" name="q3" id="q3_o1" value="1" class="real-radio">
+                            <label for="q3_o1" class="option-label"><span class="text-sm font-bold">البنوك</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q3" id="q3_o2" value="2" class="real-radio">
+                            <label for="q3_o2" class="option-label"><span class="text-sm font-bold">المصانع</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q3" id="q3_o3" value="3" class="real-radio">
+                            <label for="q3_o3" class="option-label"><span class="text-sm font-bold">الخياط - الملاهي</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q3" id="q3_o4" value="correct" class="real-radio">
+                            <label for="q3_o4" class="option-label"><span class="text-sm font-bold">جميع ماسبق</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">4</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 4: ماهو العدد المسموح لقبول السيناريوهات?</p>
+                            <input type="radio" name="q4" id="q4_o1" value="1" class="real-radio">
+                            <label for="q4_o1" class="option-label"><span class="text-sm font-bold">3 ومافوق</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q4" id="q4_o2" value="2" class="real-radio">
+                            <label for="q4_o2" class="option-label"><span class="text-sm font-bold">4 ومافوق</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q4" id="q4_o3" value="correct" class="real-radio">
+                            <label for="q4_o3" class="option-label"><span class="text-sm font-bold">5 ومافوق</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">5</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 5: هل مسموح لك تلعب كعسكري بسيرفر ثاني؟</p>
+                            <input type="radio" name="q5" id="q5_o1" value="1" class="real-radio">
+                            <label for="q5_o1" class="option-label"><span class="text-sm font-bold">نعم</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q5" id="q5_o2" value="correct" class="real-radio">
+                            <label for="q5_o2" class="option-label"><span class="text-sm font-bold">لا وتعتبر خيانة عسكرية وتعرضني للفصل</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">6</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 6: in حال كان هنالك شكوى على احد افراد الطوارئ فعليك التوجه الى:</p>
+                            <input type="radio" name="q6" id="q6_o1" value="1" class="real-radio">
+                            <label for="q6_o1" class="option-label"><span class="text-sm font-bold">رئاسة الوزراء</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q6" id="q6_o2" value="2" class="real-radio">
+                            <label for="q6_o2" class="option-label"><span class="text-sm font-bold">نائب وزير الداخلية</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q6" id="q6_o3" value="3" class="real-radio">
+                            <label for="q6_o3" class="option-label"><span class="text-sm font-bold">قادات قوات الطوارئ الخاصة</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q6" id="q6_o4" value="correct" class="real-radio">
+                            <label for="q6_o4" class="option-label"><span class="text-sm font-bold">الضباط : رئاسه الشؤون الداخلية</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">7</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 7: في حال كان هنالك شكوى على احد ضباط الطوارئ فعليك التوجه الى:</p>
+                            <input type="radio" name="q7" id="q7_o1" value="1" class="real-radio">
+                            <label for="q7_o1" class="option-label"><span class="text-sm font-bold">رئاسة الوزراء</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q7" id="q7_o2" value="2" class="real-radio">
+                            <label for="q7_o2" class="option-label"><span class="text-sm font-bold">وزير الداخلية</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q7" id="q7_o3" value="3" class="real-radio">
+                            <label for="q7_o3" class="option-label"><span class="text-sm font-bold">قائد او نائب او مستشار قوات الطوارئ الخاصة</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q7" id="q7_o4" value="4" class="real-radio">
+                            <label for="q7_o4" class="option-label"><span class="text-sm font-bold">اي ضابط اعلى منه رتبة</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q7" id="q7_o5" value="correct" class="real-radio">
+                            <label for="q7_o5" class="option-label"><span class="text-sm font-bold">رئاسة شؤون الضباط والاقسام</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">8</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 8: هل مسموح لك تخطي المراجع?</p>
+                            <input type="radio" name="q8" id="q8_o1" value="correct" class="real-radio">
+                            <label for="q8_o1" class="option-label"><span class="text-sm font-bold">لا وقد احاسب عليها</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q8" id="q8_o2" value="2" class="real-radio">
+                            <label for="q8_o2" class="option-label"><span class="text-sm font-bold">نعم</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">9</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 9: تقديم الأستقالات من اي رتبه?</p>
+                            <input type="radio" name="q9" id="q9_o1" value="1" class="real-radio">
+                            <label for="q9_o1" class="option-label"><span class="text-sm font-bold">جندي أول</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q9" id="q9_o2" value="2" class="real-radio">
+                            <label for="q9_o2" class="option-label"><span class="text-sm font-bold">عريف</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q9" id="q9_o3" value="correct" class="real-radio">
+                            <label for="q9_o3" class="option-label"><span class="text-sm font-bold">رقيب</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q9" id="q9_o4" value="4" class="real-radio">
+                            <label for="q9_o4" class="option-label"><span class="text-sm font-bold">رئيس رقباء</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">10</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 10: يحق لك إطلاق النار بشكل مباشر في الحالات التالية:</p>
+                            <input type="radio" name="q10" id="q10_o1" value="1" class="real-radio">
+                            <label for="q10_o1" class="option-label"><span class="text-sm font-bold">محاولة الدخول الاجباري للمركـز</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q10" id="q10_o2" value="2" class="real-radio">
+                            <label for="q10_o2" class="option-label"><span class="text-sm font-bold">حمل المواطن لسلاح في يدة مهما كان نوعه</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q10" id="q10_o3" value="correct" class="real-radio">
+                            <label for="q10_o3" class="option-label"><span class="text-sm font-bold">جميع ماسبق</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">11</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 11: هل يسمح ترك سيارتك العسكرية مفتوحه?</p>
+                            <input type="radio" name="q11" id="q11_o1" value="1" class="real-radio">
+                            <label for="q11_o1" class="option-label"><span class="text-sm font-bold">يسمح عند الضرورة</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q11" id="q11_o2" value="correct" class="real-radio">
+                            <label for="q11_o2" class="option-label"><span class="text-sm font-bold">لايـسمح أبدا</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">12</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 12: هل يحق لك الدخول أو الخروج للصف العسكري بدون اذن؟</p>
+                            <input type="radio" name="q12" id="q12_o1" value="1" class="real-radio">
+                            <label for="q12_o1" class="option-label"><span class="text-sm font-bold">نعم</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q12" id="q12_o2" value="correct" class="real-radio">
+                            <label for="q12_o2" class="option-label"><span class="text-sm font-bold">لا وقد اتحاسب عليها</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">13</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 13: الحد الأقصى للأجازات الخارجية هو:</p>
+                            <input type="radio" name="q13" id="q13_o1" value="1" class="real-radio">
+                            <label for="q13_o1" class="option-label"><span class="text-sm font-bold">10 ايام</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q13" id="q13_o2" value="correct" class="real-radio">
+                            <label for="q13_o2" class="option-label"><span class="text-sm font-bold">14 يوم</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q13" id="q13_o3" value="3" class="real-radio">
+                            <label for="q13_o3" class="option-label"><span class="text-sm font-bold">اسبوع</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">14</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 14: هل مسموح الطلق في المركز ؟</p>
+                            <input type="radio" name="q14" id="q14_o1" value="1" class="real-radio">
+                            <label for="q14_o1" class="option-label"><span class="text-sm font-bold">نعم</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q14" id="q14_o2" value="correct" class="real-radio">
+                            <label for="q14_o2" class="option-label"><span class="text-sm font-bold">لا وقد أحاسب عليها</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">15</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 15: عند التفاخر بالرتبة تتم محاسبتك بـ:</p>
+                            <input type="radio" name="q15" id="q15_o1" value="correct" class="real-radio">
+                            <label for="q15_o1" class="option-label"><span class="text-sm font-bold">فصل مباشرة</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q15" id="q15_o2" value="2" class="real-radio">
+                            <label for="q15_o2" class="option-label"><span class="text-sm font-bold">تحذير وظيفي اول وثاني</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q15" id="q15_o3" value="3" class="real-radio">
+                            <label for="q15_o3" class="option-label"><span class="text-sm font-bold">تحذير وظيفي اول</span><span class="option-radio"></span></label>
+                        </div>
+
+                        <div class="question-card">
+                            <span class="question-number">16</span>
+                            <p class="text-white font-black mb-4 text-sm">سؤال 16: في حال غيابك بدون عذر رسمي يتم محاسبتك بـ:</p>
+                            <input type="radio" name="q16" id="q16_o1" value="1" class="real-radio">
+                            <label for="q16_o1" class="option-label"><span class="text-sm font-bold">لفت نظر فقط</span><span class="option-radio"></span></label>
+                            <input type="radio" name="q16" id="q16_o2" value="correct" class="real-radio">
+                            <label for="q16_o2" class="option-label"><span class="text-sm font-bold">عقوبة عسكرية بناءً على لائحة الغياب والإنضباط</span><span class="option-radio"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-between border-t border-zinc-800/60 mt-6">
+                        <button type="button" onclick="goToStep(1)" class="bg-zinc-700 hover:bg-zinc-600 text-white font-black text-xs py-3 px-6 rounded-lg transition shadow-md">
+                            ➡️ السابق
+                        </button>
+                        <button type="button" onclick="goToStep(3)" class="bg-red-600 hover:bg-red-700 text-white font-black text-xs py-3 px-8 rounded-lg transition shadow-md">
+                            التالي: المرفقات ⬅️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- الخطوة الثالثة: المرفقات -->
+                <div id="step3Content" class="space-y-5 hidden">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-black text-white">وثائق ومرفقات المستجد</h2>
+                        <span class="text-xs text-gray-500 font-black">STEP 03</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-zinc-800/30 p-6 rounded-xl border border-zinc-800 flex flex-col items-center justify-center text-center">
+                            <span class="text-white font-black text-sm mb-3">صورة اللبس العسكري للمتقدم</span>
+                            <input type="file" id="id_card_uploader" accept="image/*" class="hidden" onchange="previewAttachment(this, 'id_preview')">
+                            <div onclick="document.getElementById('id_card_uploader').click()" class="w-full h-40 border-2 border-dashed border-zinc-700 rounded-lg flex items-center justify-center cursor-pointer hover:border-red-500 transition overflow-hidden">
+                                <img id="id_preview" class="w-full h-full object-cover hidden">
+                                <span id="id_placeholder" class="text-gray-500 text-xs font-bold">اضغط لرفع الصورة</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-zinc-800/30 p-6 rounded-xl border border-zinc-800 flex flex-col items-center justify-center text-center">
+                            <span class="text-white font-black text-sm mb-3">صورة اثبات ادخال السكربت  </span>
+                            <input type="file" id="medical_uploader" accept="image/*" class="hidden" onchange="previewAttachment(this, 'medical_preview')">
+                            <div onclick="document.getElementById('medical_uploader').click()" class="w-full h-40 border-2 border-dashed border-zinc-700 rounded-lg flex items-center justify-center cursor-pointer hover:border-red-500 transition overflow-hidden">
+                                <img id="medical_preview" class="w-full h-full object-cover hidden">
+                                <span id="medical_placeholder" class="text-gray-500 text-xs font-bold">اضغط لرفع الصورة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-between border-t border-zinc-800/60 mt-6">
+                        <button type="button" onclick="goToStep(2)" class="bg-zinc-700 hover:bg-zinc-600 text-white font-black text-xs py-3 px-6 rounded-lg transition shadow-md">
+                            ➡️ السابق
+                        </button>
+                        <button type="button" onclick="generateOutputs()" class="bg-green-600 hover:bg-green-700 text-white font-black text-xs py-3 px-8 rounded-lg transition shadow-md">
+                            إنهاء واستخراج المخرجات 📑
+                        </button>
+                    </div>
+                </div>
+
+                <!-- الخطوة الرابعة: المخرجات الجاهزة والبطاقة الموزونة والمحمية -->
+                <div id="step4Content" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-black text-white">المخرجات الجاهزة للإرسال</h2>
+                        <span class="text-xs text-gray-500 font-black">STEP 04</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        
+                        <!-- الحقول والنماذج النصية -->
+                        <div class="lg:col-span-7 space-y-5">
+                            <div class="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800 space-y-3">
+                                <h4 class="text-sm font-black text-white flex items-center gap-2"> رسالة التوظيف الرسمية</h4>
+                                <textarea id="employment_text" rows="10" readonly class="w-full font-mono text-xs text-green-400 bg-black p-3 rounded-lg border border-zinc-800 custom-scrollbar resize-none text-right" style="direction: ltr; white-space: pre;"></textarea>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="justCopy('employment_text')" class="bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold py-2.5 rounded-lg transition">نسخ فقط </button>
+                                    <button onclick="copyAndRedirectApp('employment_text', '1255258917676515338/1279517528170954863')" class="bg-amber-500 hover:bg-amber-600 text-black font-black text-xs py-2.5 rounded-lg transition">نسخ وفتح ديسكورد </button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800 space-y-3 flex flex-col justify-between">
+                                    <h4 class="text-sm font-black text-white flex items-center gap-2"> طلب الرولات وتحديث الرتب</h4>
+                                    <textarea id="roles_text" rows="7" readonly class="w-full font-mono text-xs text-green-400 bg-black p-3 rounded-lg border border-zinc-800 custom-scrollbar resize-none text-right" style="direction: ltr; white-space: pre;"></textarea>
+                                    <div class="grid grid-cols-2 gap-2 pt-2">
+                                        <button onclick="justCopy('roles_text')" class="bg-zinc-800 hover:bg-zinc-700 text-white text-[11px] font-bold py-2 rounded transition">نسخ فقط </button>
+                                        <button onclick="copyAndRedirectApp('roles_text', '1258337314388705291/1263721496451354644')" class="bg-amber-500 hover:bg-amber-600 text-black font-black text-[11px] py-2 rounded transition">نسخ وفتح ديسكورد </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-zinc-900/60 p-4 rounded-xl border border-zinc-800 space-y-3 flex flex-col justify-between">
+                                    <h4 class="text-sm font-black text-white flex items-center gap-2"> طلب تعديل الاسم العسكري</h4>
+                                    <textarea id="name_change_text" rows="7" readonly class="w-full font-mono text-xs text-green-400 bg-black p-3 rounded-lg border border-zinc-800 custom-scrollbar resize-none text-right" style="direction: ltr; white-space: pre;"></textarea>
+                                    <div class="grid grid-cols-2 gap-2 pt-2">
+                                        <button onclick="justCopy('name_change_text')" class="bg-zinc-800 hover:bg-zinc-700 text-white text-[11px] font-bold py-2 rounded transition">نسخ فقط </button>
+                                        <button onclick="copyAndRedirectApp('name_change_text', '1255258917676515338/1271540763402043454')" class="bg-amber-500 hover:bg-amber-600 text-black font-black text-[11px] py-2 rounded transition">نسخ وفتح ديسكورد </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-zinc-950 border border-amber-600/30 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-white shadow-inner">
+                                <div class="text-right">
+                                    <h5 class="text-xs font-black text-amber-400 flex items-center gap-1">⚙️ تخصيص نظام التوجيه:</h5>
+                                    <p class="text-zinc-500 text-[10px] mt-0.5">اختر تطبيق الديسكورد الفعال بجهازك ليتم تحويلك للروم فوراً عند ضغط أزرار الإرسال.</p>
+                                </div>
+                                <div class="w-full sm:w-56">
+                                    <select id="discord_client_type" class="focus:border-amber-500 font-bold text-[11px] p-2 !p-2 w-full bg-zinc-900 border border-zinc-800 rounded">
+                                        <option value="discord">ديسكورد العادي (Discord App)</option>
+                                        <option value="discord-canary">ديسكورد كناري (Discord Canary)</option>
+                                        <option value="discord-ptb">ديسكورد المطورين (Discord PTB)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- === تعديل صندوق بطاقة الهوية الذكي لحل المشاكل بالملي === -->
+                        <div class="lg:col-span-5 flex flex-col items-center justify-center space-y-4 w-full">
+                            <span class="text-xs font-black text-gray-400 self-start">🪪 بطاقة اعتماد قوات الطوارئ الخاصة:</span>
+                            
+                            <div id="military_card_canvas" class="w-full max-w-[420px] bg-[#0d1117] p-5 rounded-xl border-2 border-[#e3b341] shadow-2xl block text-white relative">
+                                <div class="absolute top-2 left-5 text-[8px] font-black tracking-widest text-zinc-600">Fancy RP</div>
+                                
+                                <div>
+                                    <!-- الهيدر الداخلي للبطاقة -->
+                                    <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-3 flex justify-between items-center h-[76px] relative">
+                                        
+                                        <div id="result_container" class="hidden w-[85px] h-[36px] overflow-hidden rounded flex items-center justify-center">
+    <span id="card_result_badge" class="text-[11px] font-black uppercase text-center block w-full py-1.5 rounded"></span>
+</div>
+
+                                        <!-- العناوين الرئيسية المنتصفة -->
+                                        <div class="flex-1 text-center px-2">
+                                            <div class="text-[13px] font-black text-[#e3b341] leading-tight card-fix-text">الكلية العسكرية لقوات الطوارئ</div>
+                                            <div class="text-[7px] text-gray-400 font-bold font-mono tracking-wider mt-0.5 uppercase">Recruitment Authorization Card</div>
+                                        </div>
+
+                                        <!-- الشعار المباشر -->
+                                        <div class="w-12 h-12 flex-shrink-0">
+                                            <img id="card_logo" src="OIP.webp" class="w-12 h-12 object-contain rounded-full border border-zinc-700 bg-black">
+                                        </div>
+
+                                    </div>
+
+                                    <!-- مربعات البيانات الثلاثية (الكود - الاسم - الهوية) مع تلافي الأخطاء تماماً -->
+                                    <div class="grid grid-cols-4 gap-2 text-center my-4">
+                                        <!-- مربع الكود -->
+                                        <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-2 flex flex-col justify-between h-[68px]">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">الكود</p>
+                                            <span id="card_code" class="text-[13px] font-black text-white block truncate pb-2"></span>
+                                        </div>
+                                        
+                                        <!-- مربع الاسم العسكري (موسع ومؤمن للغات وحل مشكلة تقلب الحروف) -->
+                                        <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-2 col-span-2 flex flex-col justify-between h-[68px]">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">الاسم العسكري</p>
+                                            <span id="card_name" class="text-[12px] font-black text-white block truncate pb-2 font-sans" style="direction: ltr !important;"></span>
+                                        </div>
+                                        
+                                        <!-- مربع الهوية -->
+                                        <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-2 flex flex-col justify-between h-[68px]">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">الهوية</p>
+                                            <span id="card_game_id" class="text-[13px] font-black text-white block truncate pb-2"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- الصف السفلي (العمر، الحالي، التالي) -->
+                                    <div class="grid grid-cols-3 gap-1 text-center bg-[#161b22] border border-[#30363d] rounded-lg py-2 mb-4 text-[9px] h-[55px]">
+                                        <div class="flex flex-col justify-between">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">العمر</p>
+                                            <span id="card_age" class="font-bold text-white block"></span>
+                                        </div>
+                                        <div class="flex flex-col justify-between border-x border-[#30363d]">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">الحالي</p>
+                                            <span id="card_cur_unit" class="font-black text-blue-400 block"></span>
+                                        </div>
+                                        <div class="flex flex-col justify-between">
+                                            <p class="text-[10px] text-[#e3b341] font-black card-fix-text">التالي</p>
+                                            <span id="card_nxt_unit" class="font-black text-green-400 block"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- صورة المركبات/المستجد السفلية العريضة -->
+                                    <div class="w-full border border-[#30363d] rounded-lg bg-black overflow-hidden shadow-inner mb-2" style="height: 195px;">
+                                        <img id="card_personal_img" src="" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+
+                                <!-- تاريخ إصدار البطاقة الموزون -->
+                                <div class="border-t border-[#30363d] pt-1.5 flex justify-end items-center text-[10px] text-zinc-400 font-mono tracking-wider w-full" style="direction: ltr;">
+                                    <div id="card_date"></div>
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="downloadCardImage()" class="w-full max-w-[420px] bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-white font-black text-xs py-3 rounded-lg transition shadow-md">
+                                تحميل بطاقة الهوية كصورة 💾
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <div class="max-w-7xl mx-auto w-full text-center mt-6 text-[11px] font-bold text-zinc-600">
+         منظمة إدارة الكلية العسكرية لقطاع الطوارئ • لـسيرفر Fancy RP
+    </div>
+
+    <script>
+    let globalLogoData = ""; 
+    let idCardData = "";
+
+    function handleLogoUpload(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('main_logo_img').src = e.target.result;
+                document.getElementById('card_logo').src = e.target.result;
+                globalLogoData = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewAttachment(input, previewId) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById(previewId);
+                img.src = e.target.result;
+                img.classList.remove('hidden');
+                document.getElementById(previewId.replace('preview', 'placeholder')).classList.add('hidden');
+                
+                if(previewId === 'id_preview') {
+                    idCardData = e.target.result;
+                }
+                updateAttachmentCount();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function updateAttachmentCount() {
+        let count = 0;
+        if(!document.getElementById('id_preview').classList.contains('hidden')) count++;
+        if(!document.getElementById('medical_preview').classList.contains('hidden')) count++;
+        
+        let sideStatus = document.getElementById('side_status3');
+        sideStatus.innerText = `${count} / 2`;
+        if(count === 2) {
+            sideStatus.className = "bg-green-500 text-black text-xs font-black px-3 py-1.5 rounded-md";
+        }
+    }
+
+    function calculateUnits() {
+        let codeInput = document.getElementById('soldier_code').value;
+        let currentUnit = document.getElementById('current_unit');
+        let nextUnit = document.getElementById('next_unit');
+
+        if(codeInput === "" || isNaN(codeInput)) {
+            currentUnit.value = "M-0";
+            nextUnit.value = "M-1";
+            return;
+        }
+
+        let code = parseInt(codeInput);
+        currentUnit.value = `M-${code}`;
+        nextUnit.value = `M-${code + 1}`;
+    }
+
+    function updateQuizStatus() {
+        let answered = 0;
+        for(let i = 1; i <= 16; i++) {
+            let radios = document.getElementsByName(`q${i}`);
+            for(let radio of radios) {
+                if(radio.checked) { answered++; break; }
+            }
+        }
+        let sideStatus = document.getElementById('side_status2');
+        sideStatus.innerText = `${answered} / 16`;
+        if(answered === 16) {
+            sideStatus.className = "bg-green-500 text-black text-xs font-black px-3 py-1.5 rounded-md";
+        } else {
+            sideStatus.className = "bg-zinc-800 text-gray-400 text-xs font-black px-3 py-1.5 rounded-md";
+        }
+    }
+
+    function goToStep(stepNum) {
+        document.getElementById('step1Content').classList.add('hidden');
+        document.getElementById('step2Content').classList.add('hidden');
+        document.getElementById('step3Content').classList.add('hidden');
+        document.getElementById('step4Content').classList.add('hidden');
+        
+        document.getElementById(`step${stepNum}Content`).classList.remove('hidden');
+
+        for(let i = 1; i <= 4; i++) {
+            let bar = document.getElementById(`bar${i}`);
+            let side = document.getElementById(`side${i}`);
+            let numSpan = bar.querySelector('span');
+
+            if(i === stepNum) {
+                bar.className = "text-red-500 flex items-center gap-2";
+                numSpan.className = "w-6 h-6 rounded-full bg-red-500 text-black flex items-center justify-center text-xs font-bold";
+                side.className = "flex items-center justify-between p-4 rounded-xl border-r-4 border-red-500 bg-zinc-800/40 cursor-pointer";
+            } else {
+                bar.className = "text-gray-500 flex items-center gap-2";
+                numSpan.className = "w-6 h-6 rounded-full bg-zinc-800 text-gray-400 flex items-center justify-center text-xs font-bold";
+                side.className = "flex items-center justify-between p-4 rounded-xl border-r-4 border-zinc-800 bg-zinc-800/20 cursor-pointer";
+            }
+        }
+    }
+
+    function generateOutputs() {
+        let score = 0;
+        for(let i = 1; i <= 16; i++) {
+            let radios = document.getElementsByName(`q${i}`);
+            for(let radio of radios) {
+                if(radio.checked && radio.value === "correct") { score++; }
+            }
+        }
+
+        let pass = score >= 13;
+        let statusText = pass ? "مقبول مبدئياً" : "مرفوض";
+        
+        let fileStatus = document.getElementById('fileStatus');
+        fileStatus.innerText = statusText;
+        fileStatus.className = pass ? "text-xl font-black text-green-500 block mt-1" : "text-xl font-black text-red-500 block mt-1";
+
+        let rawName = document.getElementById('applicant_name').value || "غير مدخل";
+        let rawGameId = document.getElementById('game_id').value || "0";
+        let rawCode = document.getElementById('soldier_code').value || "0";
+        let rawAge = document.getElementById('applicant_age').value || "0";
+        let curUnitStr = document.getElementById('current_unit').value || "M-0";
+        let nxtUnitStr = document.getElementById('next_unit').value || "M-1";
+        let officerInput = document.getElementById('officer_admission').value || "مسؤول القبول";
+        let discordInput = document.getElementById('discord_id').value || "000000";
+        
+        let mentionUser = discordInput.trim();
+        if (!mentionUser.startsWith('<@') && !isNaN(mentionUser) && mentionUser !== "") {
+            mentionUser = `<@${mentionUser}>`;
+        }
+
+        let mentionOfficer = officerInput.trim();
+        if (!mentionOfficer.startsWith('<@') && !isNaN(mentionOfficer) && mentionOfficer !== "") {
+            mentionOfficer = `<@${mentionOfficer}>`;
+        }
+
+        // تحديث بيانات البطاقة
+        document.getElementById('card_name').innerText = rawName;
+        document.getElementById('card_game_id').innerText = rawGameId;
+        document.getElementById('card_code').innerText = rawCode;
+        document.getElementById('card_age').innerText = rawAge;
+        document.getElementById('card_cur_unit').innerText = curUnitStr;
+        document.getElementById('card_nxt_unit').innerText = nxtUnitStr;
+        
+        let today = new Date();
+        let yyyy = today.getFullYear();
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let dd = String(today.getDate()).padStart(2, '0');
+        document.getElementById('card_date').innerText = `${yyyy}/${mm}/${dd}`;
+
+        let badge = document.getElementById('card_result_badge');
+        badge.innerText = statusText;
+        badge.className = pass ? "bg-green-600 text-white font-black text-center" : "bg-red-600 text-white font-black text-center";
+
+        let cardImg = document.getElementById('card_personal_img');
+        if (cardImg) {
+            if (idCardData !== "") {
+                cardImg.src = idCardData;
+            } else {
+                cardImg.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='1'><rect width='18' height='18' x='3' y='3' rx='2' ry='2'/><circle cx='9' cy='9' r='2'/><path d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21'/></svg>";
+            }
+        }
+
+
+        // النماذج النصية
+        let t1 = `\`\`\`diff\n-                ⭐🚨 Special Emergency Force - قوات الطوارئ 🚨⭐                -\n\`\`\`\n\n**تم تعين المستجد : **${mentionUser}\n\n**ايدي المتقدم : **${rawGameId}\n\n**عمر المتقدم : **${rawAge}\n\n**الكود العسكري : ${curUnitStr}**\n\n**الكود العسكري التالي : ${nxtUnitStr}**\n\n**مسؤول القبول والتدريب : **${mentionOfficer}\n\n\`\`\`\n[ ☬ ⚔️ أُقِر أنا مسؤول القبول والتدريب ⚔️ ☬ ]\nبأنني أكملت جميع إجراءات التوظيف ،\nوفي حال عدم الإكمال أتحمل كامل المسؤولية .\n\`\`\`\n\n<@&1415906745070391357>`;
+        document.getElementById('employment_text').value = t1;
+
+        let t2 = `${mentionUser}\nFY ☬📄${curUnitStr} ${rawName} ${rawGameId}\n<@&1263721065910243329>\n<@&1280836898956378152>\n<@&1263721094867714098>\n<@&1270885767069175980>\n<@&1263721131320279133>`;
+        document.getElementById('roles_text').value = t2;
+
+        let t3 = `${mentionUser}\nFY ☬📄${curUnitStr} ${rawName} ${rawGameId}`;
+        document.getElementById('name_change_text').value = t3;
+
+        goToStep(4);
+        document.getElementById('side_status4').className = "bg-green-500 text-black text-xs font-black px-3 py-1.5 rounded-md whitespace-nowrap";
+    }
+
+    function copyAndRedirectApp(textareaId, pathRoute) {
+        let textZone = document.getElementById(textareaId);
+        textZone.select();
+        navigator.clipboard.writeText(textZone.value).then(() => {
+            alert("تم نسخ النموذج بنجاح!");
+            let clientType = document.getElementById('discord_client_type').value;
+            window.location.href = `${clientType}:///channels/${pathRoute}`;
+        });
+    }
+
+    function justCopy(textareaId) {
+        let textZone = document.getElementById(textareaId);
+        textZone.select();
+        navigator.clipboard.writeText(textZone.value).then(() => {
+            alert("تم نسخ النص بنجاح! 📋");
+        });
+    }
+
+    // الفكس البرمجي النهائي لمنع html2canvas من قلب الحروف نهائياً أثناء استخراج الصورة
+    function downloadCardImage() {
+        let card = document.getElementById('military_card_canvas');
+        
+        // إعداد مسبق فوري قبل اللقطة
+        card.style.direction = 'ltr'; 
+        
+        html2canvas(card, { 
+            scale: 3, 
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: "#0d1117",
+            logging: false
+        }).then(canvas => {
+            // إعادة الوضع لطبيعته بعد اللقطة
+            card.style.direction = 'rtl';
+            
+            let link = document.createElement('a');
+            link.download = `Sef-Card-${document.getElementById('game_id').value || "user"}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        });
+    }
+    </script>
+</body>
+</html>
